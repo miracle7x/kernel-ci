@@ -268,8 +268,8 @@ jobs:
       - name: "✈ upload to telegram"
         if: ${{ steps.config.outputs.useAnykernel == 'true' && always() && success() }}
         env:
-          TG_TOKEN: ${{ secrets.TG_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           if [ -z "$TG_TOKEN" ] || [ -z "$TG_CHAT_ID" ]; then
             echo "Secret Telegram belum diset, skip upload."
@@ -306,8 +306,8 @@ jobs:
       - name: "✈ notify telegram on failure"
         if: ${{ failure() }}
         env:
-          TG_TOKEN: ${{ secrets.TG_CHAT_ID }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           [ -z "$TG_TOKEN" ] || [ -z "$TG_CHAT_ID" ] && exit 0
           curl -sS -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
