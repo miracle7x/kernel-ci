@@ -264,3 +264,53 @@ jobs:
           tag_name: v${{ steps.config.outputs.builddate }}.${{ github.run_number }}
           files: "${{ env.WORKSPACE }}/${{ env.KERNEL_DEVICE }}-${{ env.KERNEL_NAME }}_${{ steps.config.outputs.builddate }}.zip"
           generate_release_notes: true
+
+      - name: "✈ upload to telegram"
+        if: ${{ steps.config.outputs.useAnykernel == 'true' && always() && success() }}
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -z "$TG_TOKEN" ] || [ -z "$TG_CHAT_ID" ]; then
+            echo "Secret Telegram belum diset, skip upload."
+            exit 0
+          fi
+
+          ZIP="${{ env.WORKSPACE }}/${{ env.KERNEL_DEVICE }}-${{ env.KERNEL_NAME }}_${{ steps.config.outputs.builddate }}.zip"
+
+          if [ ! -f "$ZIP" ]; then
+            echo "ZIP tidak ditemukan: $ZIP"
+            exit 0
+          fi
+
+          KSU_INFO="${{ steps.config.outputs.withKernelSU }}"
+          SHA256=$(sha256sum "$ZIP" | cut -d' ' -f1)
+          SIZE=$(du -h "$ZIP" | cut -f1)
+
+          CAPTION="<b>✅ Build kernel selesai</b>
+          <b>Kernel:</b> <code>${{ env.KERNEL_NAME }}</code>
+          <b>Device:</b> <code>${{ env.KERNEL_DEVICE }}</code>
+          <b>Branch:</b> <code>${{ env.KERNEL_BRANCH }}</code>
+          <b>KernelSU:</b> <code>$KSU_INFO</code>
+          <b>Tanggal:</b> <code>${{ steps.config.outputs.builddate }}</code>
+          <b>Ukuran:</b> <code>$SIZE</code>
+          <b>SHA256:</b> <code>$SHA256</code>
+          <a href=\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\">Lihat run</a>"
+
+          curl -sS -f -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendDocument" \
+            -F chat_id="$TG_CHAT_ID" \
+            -F document=@"$ZIP" \
+            -F parse_mode="HTML" \
+            -F caption="$CAPTION"
+
+      - name: "✈ notify telegram on failure"
+        if: ${{ failure() }}
+        env:
+          TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          [ -z "$TG_TOKEN" ] || [ -z "$TG_CHAT_ID" ] && exit 0
+          curl -sS -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
+            -d chat_id="$TG_CHAT_ID" \
+            -d parse_mode="HTML" \
+            -d text="<b>❌ Build gagal</b>%0A<code>${{ env.KERNEL_DEVICE }}-${{ env.KERNEL_NAME }}</code>%0A<a href=\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\">Lihat log</a>"
