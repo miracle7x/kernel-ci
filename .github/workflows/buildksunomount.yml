@@ -140,6 +140,7 @@ jobs:
           <b>Branch:</b> <code>${KERNEL_BRANCH}</code>
           <b>Defconfig:</b> <code>${DEFCONFIG_NAME}</code>
           <b>KernelSU:</b> <code>${{ steps.config.outputs.withKernelSU }}</code>
+          <b>NoMount:</b> <code>${{ inputs.withNoMount }}</code>
           <a href=\"${RUN_URL}\">Lihat run</a>" || exit 1
 
       - name: "✦ install deps"
@@ -411,6 +412,7 @@ jobs:
           <b>📱 Device:</b> <code>${KERNEL_DEVICE}</code>
           <b>🌿 Branch:</b> <code>${KERNEL_BRANCH}</code>
           <b>🔧 KernelSU:</b> <code>${KSU_INFO}</code>
+          <b>🧩 NoMount:</b> <code>${{ inputs.withNoMount }}</code>
           <b>🗓 Tanggal:</b> <code>${{ steps.config.outputs.builddate }}</code>
           <b>📝 Ukuran:</b> <code>${SIZE}</code>
           <b>SHA256:</b> <code>${SHA256}</code>
