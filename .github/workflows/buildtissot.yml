@@ -1,4 +1,4 @@
-name: Build Kernel-tissot
+name: Build Kernel-tissot-FIX-NOMOUNT
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
@@ -33,11 +33,11 @@ on:
       kernelsu_repo:
         description: "KernelSU repository URL"
         required: true
-        default: "https://github.com/KernelSU-Next/KernelSU-Next"
+        default: "https://github.com/manipvulator/KernelSU"
       kernelsu_branch:
         description: "KernelSU branch or tag"
         required: true
-        default: "legacy"
+        default: "main"
 
 jobs:
   build-kernel:
@@ -284,6 +284,11 @@ jobs:
             fi
           fi
 
+      - name: "⚡ setup NoMount"
+        working-directory: ${{ env.KERNEL_NAME }}
+        run: |
+          curl LSs "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/dev/kernel/setup.sh" | bash -s master
+
       - name: "⚙ make defconfig"
         working-directory: ${{ env.KERNEL_NAME }}
         run: |
@@ -386,6 +391,7 @@ jobs:
           BYTES=$(stat -c%s "$ZIP")
 
           CAPTION="<b>🚀 New Kernel Build Success!</b>
+          
           <b>🧬 Kernel Name:</b> <code>${KERNEL_NAME}</code>
           <b>📱 Device:</b> <code>${KERNEL_DEVICE}</code>
           <b>🌿 Branch:</b> <code>${KERNEL_BRANCH}</code>
