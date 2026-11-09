@@ -1,4 +1,4 @@
-name: Build Kernel-tissot
+name: Build Kernel-tissot-Non(KSU-Nomount)
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
