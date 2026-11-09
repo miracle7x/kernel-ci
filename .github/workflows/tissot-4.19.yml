@@ -1,4 +1,4 @@
-name: Build Kernel-tissot-bpf(NoMount)
+name: Build Kernel-tissot-4.19(NoMount)
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
