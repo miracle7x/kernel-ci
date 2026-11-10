@@ -1,4 +1,4 @@
-name: Build Kernel-Mi8953(NoMount)
+name: Build Kernel-Mi8937(NoMount)
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
