@@ -19,7 +19,7 @@
   "AnyKernel3": {
     "use": true,
     "release": true,
-    "repo": "https://github.com/plrine/AnyKernel3",
-    "branch": "tissot"
+    "repo": "https://github.com/miracle7x/AnyKernel3",
+    "branch": "mi8937"
   }
 }
