@@ -1,4 +1,4 @@
-name: Build Kernel-Certus
+name: Build Kernel-tissot
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
