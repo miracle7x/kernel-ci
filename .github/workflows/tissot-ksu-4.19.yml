@@ -1,4 +1,4 @@
-name: Build Kernel-tissot
+name: Build Kernel-4.19-tissot
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
