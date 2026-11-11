@@ -1,4 +1,4 @@
-name: Build Kernel-Mi8937(NoMount)
+name: Build Kernel-Certus
 
 env:
   OUT_DIR: "${{ github.workspace }}/out"
