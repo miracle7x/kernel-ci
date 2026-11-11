@@ -144,9 +144,10 @@ jobs:
 
       - name: "✦ install deps"
         run: |
-          sudo apt-get update
-          sudo apt-get install -y bc libssl-dev libfl-dev bison flex libarchive-tools zip libelf-dev zlib1g-dev
-
+          sudo ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+          sudo apt update -y
+          sudo apt install -y bc cpio flex bison git python-is-python3 tar aria2 perl wget curl lz4 libssl-dev
+          
       - name: "✦ clone anykernel3"
         run: |
           CONFIG=".github/workflows/mi8937.json"
