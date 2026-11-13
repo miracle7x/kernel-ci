@@ -150,7 +150,7 @@ jobs:
 
       - name: "✦ clone anykernel3"
         run: |
-          CONFIG=".github/workflows/repos.json"
+          CONFIG=".github/workflows/vince.json"
           ANYKERNEL_REPO=$(jq -r '.AnyKernel3.repo' $CONFIG)
           ANYKERNEL_BRANCH=$(jq -r '.AnyKernel3.branch' $CONFIG)
           git clone --recursive --depth=1 -j $(nproc) --branch $ANYKERNEL_BRANCH $ANYKERNEL_REPO AnyKernel3
@@ -179,7 +179,7 @@ jobs:
       - name: "⚙ configure build"
         id: generate-args
         run: |
-          CONFIG=".github/workflows/repos.json"
+          CONFIG=".github/workflows/vince.json"
           params=$(jq -c '.params' $CONFIG)
           THREAD=$(nproc --all)
 
